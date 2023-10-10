@@ -42,6 +42,7 @@ module.exports = {
             
             let channel = client.channels.cache.get(process.env.LOGS_CHANNEL);
             channel.send({embeds: [leaveEmbed]});
+            console.log(`${newState.member.user.username} left ${oldState.channel.name}`);
         }
         else {
             if (oldState.channel != null){
@@ -56,6 +57,7 @@ module.exports = {
                     .setDescription(`<@${newState.member.user.id}> left <#${oldState.channel.id}>`);
                 let channel = client.channels.cache.get(process.env.LOGS_CHANNEL);
                 channel.send({embeds: [moveEmbed]});
+                console.log(`${newState.member.user.username} left ${oldState.channel.name}`);
             }
             if (ignoredChannels.includes(newState.channel.id)){
                 return
@@ -68,6 +70,7 @@ module.exports = {
                 .setDescription(`<@${newState.member.user.id}> joined <#${newState.channel.id}>`);
             let channel = client.channels.cache.get(process.env.LOGS_CHANNEL);
             channel.send({embeds: [joinEmbed]});
+            console.log(`${newState.member.user.username} joined ${newState.channel.name}`);
         }
     }
 }
