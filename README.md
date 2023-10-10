@@ -4,7 +4,7 @@ A Discord bot built on discord.js v14 that simply monitors join and leave events
 
 # Usage
 1. Clone the repostiory
-```b
+```
 git clone https://github.com/TheBSGamer/rat-listener.git
 ```
 2. Install dependencies with npm
