@@ -1,6 +1,6 @@
 # Rat Listener
 
-A Discord bot built on discord.js v14 that simply monitors join and leave events for voice channels in your server.
+A Discord bot built on discord.js v14 that simply monitors join and leave events for voice channels in your server. It logs who was in the channel at the time of leave/join as well as the user's action (leave/join).
 
 # Usage
 1. Clone the repostiory
