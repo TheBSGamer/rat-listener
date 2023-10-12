@@ -16,6 +16,8 @@ npm install
 DISCORD_SECRET= # secret goes here
 LOGS_CHANNEL= # Channel ID to log to goes here
 IGNORE_CHANNELS= # List comma-seperated IDs to ignore for logging here (eg: 12109013929122383492,548172339729990129,218641694279413937)
+LOG_IGNORED_CHANNELS_ON_MOVE=false # whether or not to log a user move event if they moved from or to an ignored channel defined in IGNORE_CHANNELS
+LOG_CHANNEL_MEMBERS_ON_MOVE=true # whether or not to log members of a call during a move event
 ```
 4. Start the bot
 ```
