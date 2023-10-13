@@ -9,7 +9,7 @@ module.exports = {
     async execute(client,...args){
         const oldState = args[0];
         const newState = args[1];
-        const ignoredChannels = process.env.IGNORE_CHANNELS.split(',');
+        const ignoredChannels = process.env.IGNORE_CHANNELS.split(',').map(channel => channel.trim());
     
         if (newState.channel == null){
             // user has left voice channel
