@@ -1,7 +1,7 @@
 const {EmbedBuilder} = require('discord.js');
 require('dotenv').config();
 
-function joinEmbed(client,newState){
+function joinEmbed(client,newState,logChannelMembersOnJoin){
     let joinEmbed = new EmbedBuilder()
         .setColor('#9dff96')
         .setTimestamp()
@@ -14,7 +14,7 @@ function joinEmbed(client,newState){
         joinEmbed.setAuthor({name: `${newState.member.user.username}#${newState.member.user.discriminator}`, iconURL: `${newState.member.user.displayAvatarURL()}`})
     }
 
-    if (newState.channel.members){
+    if (newState.channel.members && logChannelMembersOnJoin){
         if (newState.channel.members?.size > 1){
             joinEmbed.setDescription(`<@${newState.member.user.id}> joined <#${newState.channel.id}>\nID: ${newState.member.user.id}\n\nThe following users were members of the call:`);
         }

@@ -10,11 +10,30 @@ module.exports = {
         const oldState = args[0];
         const newState = args[1];
         const ignoredChannels = process.env.IGNORE_CHANNELS.split(',').map(channel => channel.trim());
+
+        let logIgnoredChannelsOnMove = false;
+        let logChannelMembersOnMove;
+        let logChannelMembersOnLeave;
+        let logChannelMembersOnJoin;
+
+        // string to boolean conversion
+        if (process.env.LOG_IGNORED_CHANNELS_ON_MOVE.toLowerCase() === 'true'){
+            logIgnoredChannelsOnMove = true;
+        }
+        if (process.env.LOG_CHANNEL_MEMBERS_ON_MOVE.toLowerCase() === 'true'){
+            logChannelMembersOnMove = true;
+        }
+        if (process.env.LOG_CHANNEL_MEMBERS_ON_LEAVE.toLowerCase() === 'true'){
+            logChannelMembersOnLeave = true;
+        }
+        if (process.env.LOG_CHANNEL_MEMBERS_ON_JOIN.toLowerCase() === 'true'){
+            logChannelMembersOnJoin = true;
+        }
     
         if (newState.channel == null){
             // user has left voice channel
             if (!ignoredChannels.includes(oldState.channel.id)){
-                leaveEmbed(client,oldState,newState);
+                leaveEmbed(client,oldState,newState,logChannelMembersOnLeave);
             }
         }
         else {
@@ -27,16 +46,6 @@ module.exports = {
             if (oldState.channel != null){
                 let ignoredOldState = false;
                 let ignoredNewState = false;
-                let logIgnoredChannelsOnMove = false;
-                let logChannelMembersOnMove;
-
-                // string to boolean conversion
-                if (process.env.LOG_IGNORED_CHANNELS_ON_MOVE.toLowerCase() === 'true'){
-                    logIgnoredChannelsOnMove = true;
-                }
-                if (process.env.LOG_CHANNEL_MEMBERS_ON_MOVE.toLowerCase() === 'true'){
-                    logChannelMembersOnMove = true;
-                }
 
                 if (ignoredChannels.includes(oldState.channel.id)){
                     ignoredOldState = true;
@@ -73,7 +82,7 @@ module.exports = {
             }
             // user joined a channel
             if (!ignoredChannels.includes(newState.channel.id)){
-                joinEmbed(client,newState);
+                joinEmbed(client,newState,logChannelMembersOnJoin);
             }
         }
     }

@@ -1,7 +1,7 @@
 const {EmbedBuilder} = require('discord.js');
 require('dotenv').config();
 
-function leaveEmbed(client,oldState,newState){
+function leaveEmbed(client,oldState,newState,logChannelMembersOnLeave){
     let leaveEmbed = new EmbedBuilder()
         .setColor('#ff9696')
         .setTimestamp()
@@ -14,7 +14,7 @@ function leaveEmbed(client,oldState,newState){
         leaveEmbed.setAuthor({name: `${newState.member.user.username}#${newState.member.user.discriminator}`, iconURL: `${newState.member.user.displayAvatarURL()}`})
     }
 
-    if (oldState.channel.members){
+    if (oldState.channel.members && logChannelMembersOnLeave){
         if (oldState.channel.members.size > 0){
             leaveEmbed.setDescription(`<@${newState.member.user.id}> left <#${oldState.channel.id}>\nID: ${newState.member.user.id}\n\nThe following users were members of the call:`);
         }
