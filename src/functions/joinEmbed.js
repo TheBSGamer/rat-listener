@@ -21,18 +21,16 @@ function joinEmbed(client,newState){
         for (let [memberId,guildMember] of newState.channel.members){
             if (guildMember.user.id !== newState.member.user.id){
                 if (guildMember.user.globalName){
-                    joinEmbed.addFields({
-                        name: `${guildMember.user.globalName} (${guildMember.user.username})`,
-                        value: `ID: ${guildMember.user.id}`,
-                        inline: false
-                    });
+                    joinEmbed.data.description += `\n<@${guildMember.user.id}> (${guildMember.user.username})\nID: ${guildMember.user.id}`;
                 }
+                // legacy user
                 else {
-                    joinEmbed.addFields({
-                        name: `${guildMember.user.username}#${guildMember.user.discriminator}`,
-                        value: `ID: ${guildMember.user.id}`,
-                        inline: false
-                    });
+                    if (guildMember.user.nickname){
+                        joinEmbed.data.description += `\n<@${guildMember.user.id}> (${guildMember.user.nickname})\nID: ${guildMember.user.id}`;
+                    }
+                    else {
+                        joinEmbed.data.description += `\n<@${guildMember.user.id}>\nID: ${guildMember.user.id}`;
+                    }
                 }
             }
         }

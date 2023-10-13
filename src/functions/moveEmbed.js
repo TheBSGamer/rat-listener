@@ -27,18 +27,16 @@ function moveEmbed(client,oldState,newState,logChannelMembersOnMove){
                 continue
             }
             if (guildMember.user.globalName){
-                moveEmbed.addFields({
-                    name: `${guildMember.user.globalName} (${guildMember.user.username})`,
-                    value: `ID: ${guildMember.user.id}`,
-                    inline: false
-                });
+                moveEmbed.data.description += `\n<@${guildMember.user.id}> (${guildMember.user.username})\nID: ${guildMember.user.id}`;
             }
+            // legacy user
             else {
-                moveEmbed.addFields({
-                    name: `${guildMember.user.username}#${guildMember.user.discriminator}`,
-                    value: `ID: ${guildMember.user.id}`,
-                    inline: false
-                });
+                if (guildMember.user.nickname){
+                    moveEmbed.data.description += `\n<@${guildMember.user.id}> (${guildMember.user.nickname})\nID: ${guildMember.user.id}`;
+                }
+                else {
+                    moveEmbed.data.description += `\n<@${guildMember.user.id}>\nID: ${guildMember.user.id}`;
+                }
             }
         }
     }

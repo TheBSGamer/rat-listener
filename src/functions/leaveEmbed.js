@@ -20,18 +20,16 @@ function leaveEmbed(client,oldState,newState){
         }
         for (let [memberId,guildMember] of oldState.channel.members){
             if (guildMember.user.globalName){
-                leaveEmbed.addFields({
-                    name: `${guildMember.user.globalName} (${guildMember.user.username})`,
-                    value: `ID: ${guildMember.user.id}`,
-                    inline: false
-                });
+                leaveEmbed.data.description += `\n<@${guildMember.user.id}> (${guildMember.user.username})\nID: ${guildMember.user.id}`;
             }
+            // legacy user
             else {
-                leaveEmbed.addFields({
-                    name: `${guildMember.user.username}#${guildMember.user.discriminator}`,
-                    value: `ID: ${guildMember.user.id}`,
-                    inline: false
-                });
+                if (guildMember.user.nickname){
+                    leaveEmbed.data.description += `\n<@${guildMember.user.id}> (${guildMember.user.nickname})\nID: ${guildMember.user.id}`;
+                }
+                else {
+                    leaveEmbed.data.description += `\n<@${guildMember.user.id}>\nID: ${guildMember.user.id}`;
+                }
             }
         }
     }
