@@ -14,11 +14,18 @@ function moveEmbed(client,oldState,newState,logChannelMembersOnMove){
         moveEmbed.setAuthor({name: `${newState.member.user.username}#${newState.member.user.discriminator}`, iconURL: `${newState.member.user.displayAvatarURL()}`})
     }
 
-    if (oldState.channel.members && logChannelMembersOnMove){
-        if (oldState.channel.members.size > 0){
+    if (newState.channel.members && logChannelMembersOnMove){
+        let idArray = [];
+        for (let [memberId,guildMember] of newState.channel.members){
+            idArray.push(memberId);
+        }
+        if ((newState.channel.members.size > 0) && !(idArray.includes(newState.member.user.id))){
             moveEmbed.setDescription(`<@${newState.member.user.id}> moved from <#${oldState.channel.id}> to <#${newState.channel.id}>\nID: ${newState.member.user.id}\n\nThe following users were members of the call:`);
         }
-        for (let [memberId,guildMember] of oldState.channel.members){
+        for (let [memberId,guildMember] of newState.channel.members){
+            if (idArray.includes(memberId)){
+                continue
+            }
             if (guildMember.user.globalName){
                 moveEmbed.addFields({
                     name: `${guildMember.user.globalName} (${guildMember.user.username})`,

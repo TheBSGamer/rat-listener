@@ -32,7 +32,7 @@ module.exports = {
 
                 // string to boolean conversion
                 if (process.env.LOG_IGNORED_CHANNELS_ON_MOVE.toLowerCase() === 'true'){
-                    logChannelMembersOnMove = true;
+                    logIgnoredChannelsOnMove = true;
                 }
                 if (process.env.LOG_CHANNEL_MEMBERS_ON_MOVE.toLowerCase() === 'true'){
                     logChannelMembersOnMove = true;
