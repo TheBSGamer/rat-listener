@@ -19,11 +19,11 @@ function moveEmbed(client,oldState,newState,logChannelMembersOnMove){
         for (let [memberId,guildMember] of newState.channel.members){
             idArray.push(memberId);
         }
-        if ((newState.channel.members.size > 0) && !(idArray.includes(newState.member.user.id))){
+        if (newState.channel.members.size > 1){
             moveEmbed.setDescription(`<@${newState.member.user.id}> moved from <#${oldState.channel.id}> to <#${newState.channel.id}>\nID: ${newState.member.user.id}\n\nThe following users were members of the call:`);
         }
         for (let [memberId,guildMember] of newState.channel.members){
-            if (idArray.includes(memberId)){
+            if (memberId === newState.member.user.id){
                 continue
             }
             if (guildMember.user.globalName){
