@@ -20,6 +20,7 @@ LOG_IGNORED_CHANNELS_ON_MOVE=false # whether or not to log a user move event if 
 LOG_CHANNEL_MEMBERS_ON_MOVE=true # whether or not to log members of a call during a move event
 LOG_CHANNEL_MEMBERS_ON_LEAVE=true # whether or not to log members of a call during a leave event
 LOG_CHANNEL_MEMBERS_ON_JOIN=true # whether or not to log members of a call during a join event
+PLACEHOLDER_TIMESTAMP_MESSAGE=*Generating embed...* # string for placeholder message that is generated while the embed is created
 ```
 4. Start the bot
 ```
