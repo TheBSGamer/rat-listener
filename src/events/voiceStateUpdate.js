@@ -10,6 +10,8 @@ module.exports = {
     async execute(client,...args){
         const oldState = args[0];
         const newState = args[1];
+        const oldChannelId = args[0]?.channelId;
+        const newChannelId = args[1]?.channelId;
         const ignoredChannels = process.env.IGNORE_CHANNELS.split(',').map(channel => channel.trim());
 
         let logIgnoredChannelsOnMove = false;
@@ -36,22 +38,27 @@ module.exports = {
         if (oldState.channel?.id === newState.channel?.id){
             return;
         }
+
+        // Lookup log channel
+        let channel = client.channels.cache.get(process.env.LOGS_CHANNEL);
+
+        if (oldState?.guild.id != channel.guildId){
+            console.error(`voice update happened in guild that is not in log channel guild!`);
+            return;
+        }
     
         if (newState.channel == null){
             // user has left voice channel
             if (!ignoredChannels.includes(oldState.channel?.id)){
-                let channel = client.channels.cache.get(process.env.LOGS_CHANNEL);
                 let message = await channel.send(`${process.env.PLACEHOLDER_TIMESTAMP_MESSAGE}`);
                 discordEpoch = newDiscordEpoch('D');
-                leaveEmbed(client,oldState,newState,logChannelMembersOnLeave,message,discordEpoch);
+                leaveEmbed(client,oldState,newState,oldChannelId,logChannelMembersOnLeave,message,discordEpoch);
             }
         }
         else {
-
             // Check if a user left a channel and went to another channel
             if (oldState.channel != null){
                 discordEpoch = newDiscordEpoch('D');
-                let channel = client.channels.cache.get(process.env.LOGS_CHANNEL);
                 let message = await channel.send(`${process.env.PLACEHOLDER_TIMESTAMP_MESSAGE}`);
                 let ignoredOldState = false;
                 let ignoredNewState = false;
@@ -64,18 +71,18 @@ module.exports = {
                 }
 
                 // each conditional has a return at the bottom to ignore join block during move event
-                // The user went from ignored > ignored Ignoring output regardless of ignore switch
+                // The user went from ignored > ignored. Ignoring output regardless of ignore switch
                 if (ignoredOldState && ignoredNewState){
                     return
                 }
                 // The user went from monitored > ignored. Logging output if log output switch is enabled
                 else if (!ignoredOldState && ignoredNewState && logIgnoredChannelsOnMove){
-                    moveEmbed(client,oldState,newState,logChannelMembersOnMove,message,discordEpoch);
+                    moveEmbed(client,oldState,newState,oldChannelId,newChannelId,logChannelMembersOnMove,message,discordEpoch);
                     return
                 }
                 // The user went from ignored > monitored. Logging output if log output switch is enabled
                 else if (ignoredOldState && !ignoredNewState && logIgnoredChannelsOnMove){
-                    moveEmbed(client,oldState,newState,logChannelMembersOnMove,message,discordEpoch);
+                    moveEmbed(client,oldState,newState,oldChannelId,newChannelId,logChannelMembersOnMove,message,discordEpoch);
                     return
                 }
                 // The user went from one channel to another. All other conditions have been met from above so we know the log
@@ -85,16 +92,15 @@ module.exports = {
                 }
                 // The user went from monitored > monitored. Logging output regardless of ignore switch
                 else {
-                    moveEmbed(client,oldState,newState,logChannelMembersOnMove,message,discordEpoch);
+                    moveEmbed(client,oldState,newState,oldChannelId,newChannelId,logChannelMembersOnMove,message,discordEpoch);
                     return
                 }
             }
             // user joined a channel
             if (!ignoredChannels.includes(newState.channel?.id)){
-                let channel = client.channels.cache.get(process.env.LOGS_CHANNEL);
                 let message = await channel.send(`${process.env.PLACEHOLDER_TIMESTAMP_MESSAGE}`);
                 discordEpoch = newDiscordEpoch('D');
-                joinEmbed(client,newState,logChannelMembersOnJoin,message,discordEpoch);
+                joinEmbed(client,newState,newChannelId,logChannelMembersOnJoin,message,discordEpoch);
             }
         }
     }

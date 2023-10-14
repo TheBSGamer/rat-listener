@@ -2,6 +2,9 @@
 
 A Discord bot built on discord.js v14 that simply monitors join and leave events for voice channels in your server. It logs who was in the channel at the time of leave/join as well as the user's action (leave/join).
 
+> **Warning**
+> This bot is intentionally made to *not* be used in multiple guilds due to the volume of messages that may come through in some guilds. If you want to use it in multiple guilds, you will need to make an instance of the bot for each guild you plan to use it in.
+
 # Usage
 1. Clone the repostiory
 ```
