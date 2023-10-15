@@ -28,7 +28,18 @@ LOG_CHANNEL_MEMBERS_ON_LEAVE=true # whether or not to log members of a call duri
 LOG_CHANNEL_MEMBERS_ON_JOIN=true # whether or not to log members of a call during a join event
 PLACEHOLDER_TIMESTAMP_MESSAGE=*Generating embed...* # string for placeholder message that is generated while the embed is created
 ```
-4. Start the bot
+4. Generate an invite link. Ensure your bot permissions have the following permissions at a minimum:
+    * View Audit Log
+    * Read Messages/View Channels
+    * Send Messages
+    * Embed Links
+    * Read Message History
+
+The calculated field is `85120`.
+```
+https://discord.com/oauth2/authorize?client_id=YOURAPPLICATIONIDGOESHERE&scope=bot&permissions=85120
+```
+5. Start the bot
 ```
 node index.js
 ```
