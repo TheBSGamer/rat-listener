@@ -23,11 +23,24 @@ async function checkForExternalMove(client,newChannelIdToCheck){
                         const difference = currentTime - eventDate;
                         let moveThreshold = 300000;
     
-                        if (moveThreshold){
-                            if (difference >= moveThreshold){
-                                return;
+                        if (difference >= moveThreshold){
+                            if (global.globalChannelIdLog[newChannelIdToCheck]){
+                                delete global.globalChannelIdLog[newChannelIdToCheck];
+                            }
+                            return;
+                        }
+                        else {
+                            if (global.globalChannelIdLog[newChannelIdToCheck]){
+                                if (GuildAuditLogsEntry.extra.count > global.globalChannelIdLog[newChannelIdToCheck].count){
+                                    global.globalChannelIdLog[newChannelIdToCheck].count = GuildAuditLogsEntry.extra.count
+                                    movedByThisId = GuildAuditLogsEntry.executorId;
+                                    break;
+                                }
                             }
                             else {
+                                global.globalChannelIdLog[newChannelIdToCheck] = {
+                                    count: GuildAuditLogsEntry.extra.count
+                                };
                                 movedByThisId = GuildAuditLogsEntry.executorId;
                                 break;
                             }

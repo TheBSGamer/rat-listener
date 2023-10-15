@@ -5,6 +5,7 @@ require('dotenv').config();
 const console = require('console');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates]});
+global.globalChannelIdLog = {};
 
 const eventsPath = path.join(__dirname, 'src\\events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
