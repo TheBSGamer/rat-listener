@@ -12,10 +12,25 @@ function joinEmbed(client,newState,newChannelId,logChannelMembersOnJoin,messageT
         .setDescription(`<@${newState.member.user.id}> joined <#${newChannelId}>\nID: ${newState.member.user.id}`);
     
     if (newState.member.user.globalName != null){
-        joinEmbed.setAuthor({name: `${newState.member.user.globalName} (${newState.member.user.username})`, iconURL: `${newState.member.user.displayAvatarURL()}`});
+        if (newState.member.nickname){
+            joinEmbed.setAuthor({name: `${newState.member.nickname} (${newState.member.user.username})`, iconURL: `${newState.member.user.displayAvatarURL()}`});
+        }
+        else {
+            if (newState.member.user.globalName === newState.member.user.username){
+                joinEmbed.setAuthor({name: `${newState.member.user.globalName}`, iconURL: `${newState.member.user.displayAvatarURL()}`});
+            }
+            else {
+                joinEmbed.setAuthor({name: `${newState.member.user.globalName} (${newState.member.user.username})`, iconURL: `${newState.member.user.displayAvatarURL()}`});
+            }
+        }
     }
     else {
-        joinEmbed.setAuthor({name: `${newState.member.user.username}#${newState.member.user.discriminator}`, iconURL: `${newState.member.user.displayAvatarURL()}`})
+        if (newState.member.nickname){
+            joinEmbed.setAuthor({name: `${newState.member.nickname} (${newState.member.user.username}#${newState.member.user.discriminator})`, iconURL: `${newState.member.user.displayAvatarURL()}`})
+        }
+        else {
+            joinEmbed.setAuthor({name: `${newState.member.user.username}#${newState.member.user.discriminator}`, iconURL: `${newState.member.user.displayAvatarURL()}`})
+        }
     }
 
     if (newState.channel?.members && logChannelMembersOnJoin){

@@ -23,10 +23,25 @@ function moveEmbed(client,oldState,newState,oldChannelId,newChannelId,logChannel
         .setDescription(`<@${newState.member.user.id}> moved from <#${oldChannelId}> to <#${newChannelId}>\nID: ${newState.member.user.id}`);
 
     if (newState.member.user.globalName != null){
-        moveEmbed.setAuthor({name: `${newState.member.user.globalName} (${newState.member.user.username})`, iconURL: `${newState.member.user.displayAvatarURL()}`});
+        if (newState.member.nickname){
+            moveEmbed.setAuthor({name: `${newState.member.nickname} (${newState.member.user.username})`, iconURL: `${newState.member.user.displayAvatarURL()}`});
+        }
+        else {
+            if (newState.member.user.globalName === newState.member.user.username){
+                moveEmbed.setAuthor({name: `${newState.member.user.globalName}`, iconURL: `${newState.member.user.displayAvatarURL()}`});
+            }
+            else {
+                moveEmbed.setAuthor({name: `${newState.member.user.globalName} (${newState.member.user.username})`, iconURL: `${newState.member.user.displayAvatarURL()}`});
+            }
+        }
     }
     else {
-        moveEmbed.setAuthor({name: `${newState.member.user.username}#${newState.member.user.discriminator}`, iconURL: `${newState.member.user.displayAvatarURL()}`})
+        if (newState.member.nickname){
+            moveEmbed.setAuthor({name: `${newState.member.nickname} (${newState.member.user.username}#${newState.member.user.discriminator})`, iconURL: `${newState.member.user.displayAvatarURL()}`})
+        }
+        else {
+            moveEmbed.setAuthor({name: `${newState.member.user.username}#${newState.member.user.discriminator}`, iconURL: `${newState.member.user.displayAvatarURL()}`})
+        }
     }
 
     if (newState.channel?.members && logChannelMembersOnMove){

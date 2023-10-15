@@ -79,13 +79,37 @@ module.exports = {
                 // The user went from monitored > ignored. Logging output if log output switch is enabled
                 else if (!ignoredOldState && ignoredNewState && logIgnoredChannelsOnMove){
                     let message = await channel.send(`${process.env.PLACEHOLDER_TIMESTAMP_MESSAGE}`);
-                    moveEmbed(client,oldState,newState,oldChannelId,newChannelId,logChannelMembersOnMove,message,discordEpoch);
+                    let checkLogs = await checkForExternalMove(client,newChannelId);
+                    if (checkLogs != null){
+                        if (checkLogs === newState.member.user.id){
+                            moveEmbed(client,oldState,newState,oldChannelId,newChannelId,logChannelMembersOnMove,message,discordEpoch);
+                        }
+                        else {
+                            modMoveEmbed(client,oldState,newState,oldChannelId,newChannelId,checkLogs,logChannelMembersOnMove,message,discordEpoch);
+                        }
+                    }
+                    else {
+                        moveEmbed(client,oldState,newState,oldChannelId,newChannelId,logChannelMembersOnMove,message,discordEpoch);
+                    }
+                    // moveEmbed(client,oldState,newState,oldChannelId,newChannelId,logChannelMembersOnMove,message,discordEpoch);
                     return
                 }
                 // The user went from ignored > monitored. Logging output if log output switch is enabled
                 else if (ignoredOldState && !ignoredNewState && logIgnoredChannelsOnMove){
                     let message = await channel.send(`${process.env.PLACEHOLDER_TIMESTAMP_MESSAGE}`);
-                    moveEmbed(client,oldState,newState,oldChannelId,newChannelId,logChannelMembersOnMove,message,discordEpoch);
+                    let checkLogs = await checkForExternalMove(client,newChannelId);
+                    if (checkLogs != null){
+                        if (checkLogs === newState.member.user.id){
+                            moveEmbed(client,oldState,newState,oldChannelId,newChannelId,logChannelMembersOnMove,message,discordEpoch);
+                        }
+                        else {
+                            modMoveEmbed(client,oldState,newState,oldChannelId,newChannelId,checkLogs,logChannelMembersOnMove,message,discordEpoch);
+                        }
+                    }
+                    else {
+                        moveEmbed(client,oldState,newState,oldChannelId,newChannelId,logChannelMembersOnMove,message,discordEpoch);
+                    }
+                    // moveEmbed(client,oldState,newState,oldChannelId,newChannelId,logChannelMembersOnMove,message,discordEpoch);
                     return
                 }
                 // The user went from one channel to another. All other conditions have been met from above so we know the log
@@ -96,7 +120,19 @@ module.exports = {
                 // The user went from monitored > monitored. Logging output regardless of ignore switch
                 else {
                     let message = await channel.send(`${process.env.PLACEHOLDER_TIMESTAMP_MESSAGE}`);
-                    moveEmbed(client,oldState,newState,oldChannelId,newChannelId,logChannelMembersOnMove,message,discordEpoch);
+                    let checkLogs = await checkForExternalMove(client,newChannelId);
+                    if (checkLogs != null){
+                        if (checkLogs === newState.member.user.id){
+                            moveEmbed(client,oldState,newState,oldChannelId,newChannelId,logChannelMembersOnMove,message,discordEpoch);
+                        }
+                        else {
+                            modMoveEmbed(client,oldState,newState,oldChannelId,newChannelId,checkLogs,logChannelMembersOnMove,message,discordEpoch);
+                        }
+                    }
+                    else {
+                        moveEmbed(client,oldState,newState,oldChannelId,newChannelId,logChannelMembersOnMove,message,discordEpoch);
+                    }
+                    // moveEmbed(client,oldState,newState,oldChannelId,newChannelId,logChannelMembersOnMove,message,discordEpoch);
                     return
                 }
             }
