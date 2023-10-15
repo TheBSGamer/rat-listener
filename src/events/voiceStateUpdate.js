@@ -14,7 +14,7 @@ module.exports = {
         const newState = args[1];
         const oldChannelId = args[0]?.channelId;
         const newChannelId = args[1]?.channelId;
-        const ignoredChannels = process.env.IGNORE_CHANNELS.split(',').map(channel => channel.trim());
+        const ignoredChannels = process.env.IGNORE_CHANNELS?.split(',').map(channel => channel.trim());
 
         let logIgnoredChannelsOnMove = false;
         let logChannelMembersOnMove;
@@ -23,16 +23,16 @@ module.exports = {
         let discordEpoch = '';
 
         // string to boolean conversion
-        if (process.env.LOG_IGNORED_CHANNELS_ON_MOVE.toLowerCase() === 'true'){
+        if (process.env.LOG_IGNORED_CHANNELS_ON_MOVE?.toLowerCase() === 'true'){
             logIgnoredChannelsOnMove = true;
         }
-        if (process.env.LOG_CHANNEL_MEMBERS_ON_MOVE.toLowerCase() === 'true'){
+        if (process.env.LOG_CHANNEL_MEMBERS_ON_MOVE?.toLowerCase() === 'true'){
             logChannelMembersOnMove = true;
         }
-        if (process.env.LOG_CHANNEL_MEMBERS_ON_LEAVE.toLowerCase() === 'true'){
+        if (process.env.LOG_CHANNEL_MEMBERS_ON_LEAVE?.toLowerCase() === 'true'){
             logChannelMembersOnLeave = true;
         }
-        if (process.env.LOG_CHANNEL_MEMBERS_ON_JOIN.toLowerCase() === 'true'){
+        if (process.env.LOG_CHANNEL_MEMBERS_ON_JOIN?.toLowerCase() === 'true'){
             logChannelMembersOnJoin = true;
         }
 
@@ -42,7 +42,12 @@ module.exports = {
         }
 
         // Lookup log channel
-        let channel = client.channels.cache.get(process.env.LOGS_CHANNEL);
+        let channel = client.channels.cache.get(process.env?.LOGS_CHANNEL);
+
+        if (channel === null || channel === undefined){
+            console.error(`Unable to find log channel specified in dotenv file! Verify that you have 'LOGS_CHANNEL' defined and that a text channel ID is defined.`);
+            return;
+        }
 
         if (oldState?.guild.id != channel.guildId){
             console.error(`voice update happened in guild that is not in log channel guild!`);
@@ -51,7 +56,7 @@ module.exports = {
     
         if (newState.channel == null){
             // user has left voice channel
-            if (!ignoredChannels.includes(oldState.channel?.id)){
+            if (!ignoredChannels?.includes(oldState.channel?.id)){
                 let message = await channel.send(`${process.env.PLACEHOLDER_TIMESTAMP_MESSAGE}`);
                 discordEpoch = newDiscordEpoch('D');
                 leaveEmbed(client,oldState,newState,oldChannelId,logChannelMembersOnLeave,message,discordEpoch);
@@ -64,10 +69,10 @@ module.exports = {
                 let ignoredOldState = false;
                 let ignoredNewState = false;
 
-                if (ignoredChannels.includes(oldState.channel?.id)){
+                if (ignoredChannels?.includes(oldState.channel?.id)){
                     ignoredOldState = true;
                 }
-                if (ignoredChannels.includes(newState.channel?.id)){
+                if (ignoredChannels?.includes(newState.channel?.id)){
                     ignoredNewState = true;
                 }
 
@@ -137,7 +142,7 @@ module.exports = {
                 }
             }
             // user joined a channel
-            if (!ignoredChannels.includes(newState.channel?.id)){
+            if (!ignoredChannels?.includes(newState.channel?.id)){
                 let message = await channel.send(`${process.env.PLACEHOLDER_TIMESTAMP_MESSAGE}`);
                 discordEpoch = newDiscordEpoch('D');
                 joinEmbed(client,newState,newChannelId,logChannelMembersOnJoin,message,discordEpoch);
