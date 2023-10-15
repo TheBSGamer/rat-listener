@@ -1,8 +1,10 @@
 const {Events, EmbedBuilder} = require('discord.js');
+const modMoveEmbed = require('../functions/modMoveEmbed');
 const moveEmbed = require('../functions/moveEmbed');
 const joinEmbed = require('../functions/joinEmbed');
 const leaveEmbed = require('../functions/leaveEmbed');
 const newDiscordEpoch = require('../functions/newDiscordEpoch');
+const checkForExternalMove = require('../functions/checkForExternalMove');
 require('dotenv').config();
 
 module.exports = {
@@ -59,7 +61,6 @@ module.exports = {
             // Check if a user left a channel and went to another channel
             if (oldState.channel != null){
                 discordEpoch = newDiscordEpoch('D');
-                let message = await channel.send(`${process.env.PLACEHOLDER_TIMESTAMP_MESSAGE}`);
                 let ignoredOldState = false;
                 let ignoredNewState = false;
 
@@ -77,11 +78,13 @@ module.exports = {
                 }
                 // The user went from monitored > ignored. Logging output if log output switch is enabled
                 else if (!ignoredOldState && ignoredNewState && logIgnoredChannelsOnMove){
+                    let message = await channel.send(`${process.env.PLACEHOLDER_TIMESTAMP_MESSAGE}`);
                     moveEmbed(client,oldState,newState,oldChannelId,newChannelId,logChannelMembersOnMove,message,discordEpoch);
                     return
                 }
                 // The user went from ignored > monitored. Logging output if log output switch is enabled
                 else if (ignoredOldState && !ignoredNewState && logIgnoredChannelsOnMove){
+                    let message = await channel.send(`${process.env.PLACEHOLDER_TIMESTAMP_MESSAGE}`);
                     moveEmbed(client,oldState,newState,oldChannelId,newChannelId,logChannelMembersOnMove,message,discordEpoch);
                     return
                 }
@@ -92,6 +95,7 @@ module.exports = {
                 }
                 // The user went from monitored > monitored. Logging output regardless of ignore switch
                 else {
+                    let message = await channel.send(`${process.env.PLACEHOLDER_TIMESTAMP_MESSAGE}`);
                     moveEmbed(client,oldState,newState,oldChannelId,newChannelId,logChannelMembersOnMove,message,discordEpoch);
                     return
                 }
